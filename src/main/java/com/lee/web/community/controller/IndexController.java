@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller("/user")
 public class IndexController {
 
-    @GetMapping("/hello")
+    @GetMapping("/index")
     public String hello(){
-        return "";
+        return "index";
     }
 
 }
