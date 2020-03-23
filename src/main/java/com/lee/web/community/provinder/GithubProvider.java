@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.lee.web.community.dto.AccessToken;
 import com.lee.web.community.dto.GithubUser;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,6 +19,10 @@ import java.io.IOException;
  **/
 @Component
 public class GithubProvider {
+    @Value("${github.url}")
+    private String url;
+    @Value("${github.app.url}")
+    private String appUrl;
 
     public String getAccessToken(AccessToken accessToken) {
         MediaType json = MediaType.get("application/json; charset=utf-8");
@@ -26,7 +31,7 @@ public class GithubProvider {
 
         RequestBody body = RequestBody.create(json, JSON.toJSONString(accessToken));
         Request request = new Request.Builder()
-                .url("https://github.com/login/oauth/access_token")
+                .url(url)
                 .post(body)
                 .build();
             try (Response response = client.newCall(request).execute()) {
@@ -44,7 +49,7 @@ public class GithubProvider {
     public GithubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://api.github.com/user?access_token="+accessToken)
+                .url(appUrl+accessToken)
                 .build();
         try{
             Response execute = client.newCall(request).execute();
